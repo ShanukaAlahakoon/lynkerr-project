@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
+import PlaceCard from "../components/PlaceCard";
 
 function Feed() {
   const [listings, setListings] = useState([]);
@@ -18,36 +19,36 @@ function Feed() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-10">
-      <h1 className="text-3xl font-bold mb-8">Travel Experiences</h1>
+    <div className="min-h-screen bg-primary pb-16 flex flex-col">
+      <div className="relative w-full h-[350px] md:h-[450px] flex items-center justify-center pt-24 text-center px-6">
+        {/* Background Image */}
+        <div className="absolute inset-0 bg-[url('/login1.jpg')] bg-cover bg-center bg-no-repeat"></div>
 
-      <div className="grid md:grid-cols-3 gap-6">
-        {listings.map((listing) => (
-          <div
-            key={listing._id}
-            className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition"
-          >
-            <img src={listing.imageUrl} className="h-48 w-full object-cover" />
+        <div className="absolute inset-0 bg-secondary/60"></div>
 
-            <div className="p-4">
-              <h2 className="text-xl font-semibold">{listing.title}</h2>
+        {/* Header Content */}
+        <div className="relative z-10 max-w-3xl">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-white drop-shadow-lg mb-4">
+            Explore <span className="text-[#F59E0B]">Travel Experiences</span>
+          </h1>
+          <p className="text-lg md:text-xl text-white/90 font-medium italic drop-shadow-md">
+            "Discover unique local adventures and hidden gems around the world."
+          </p>
+        </div>
+      </div>
 
-              <p className="text-gray-400">{listing.location}</p>
-
-              <p className="text-sm mt-2 line-clamp-2">{listing.description}</p>
-
-              <p className="text-sm mt-3 text-gray-400">
-                By {listing.createdBy?.name}
-              </p>
-
-              {listing.price && (
-                <p className="text-yellow-400 mt-2 font-semibold">
-                  ${listing.price}
-                </p>
-              )}
-            </div>
+      <div className="w-full max-w-7xl mx-auto px-6 md:px-8 mt-12">
+        {listings.length > 0 ? (
+          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {listings.map((listing) => (
+              <PlaceCard key={listing._id} listing={listing} />
+            ))}
           </div>
-        ))}
+        ) : (
+          <div className="flex justify-center items-center h-40 text-secondary/60 text-lg font-medium">
+            Loading experiences...
+          </div>
+        )}
       </div>
     </div>
   );

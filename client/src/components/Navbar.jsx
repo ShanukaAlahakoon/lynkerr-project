@@ -1,31 +1,42 @@
 import { Link } from "react-router-dom";
+import UserData from "./UserData";
 
 function Navbar() {
   return (
-    <nav className="bg-gray-900 text-white border-b border-gray-700">
-      <div className="max-w-6xl mx-auto flex justify-between items-center p-4">
-        {/* Logo */}
-        <Link to="/" className="text-xl font-bold text-yellow-400">
-          Lynkerr
+    <nav className="fixed top-0 w-full z-50 bg-[#1F2937]/70 backdrop-blur-md border-b border-white/10 shadow-lg">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-3">
+        <Link
+          to="/"
+          className="flex items-center gap-3 transition-transform hover:scale-105"
+        >
+          <img
+            src="/logo.png"
+            alt="Logo"
+            className="w-10 h-10 object-contain drop-shadow-md"
+          />
+          <span className="text-2xl font-extrabold tracking-tight text-[#F59E0B] drop-shadow-sm">
+            Experio
+          </span>
         </Link>
 
-        {/* Navigation Links */}
-        <div className="flex gap-6">
-          <Link to="/" className="hover:text-yellow-400">
+        <div className="flex items-center gap-6 font-medium text-sm md:text-base">
+          <Link
+            to="/"
+            className="text-[#F5F9FF] hover:text-[#0EA5E9] transition-colors duration-200"
+          >
             Home
           </Link>
 
-          <Link to="/create" className="hover:text-yellow-400">
+          <Link
+            to="/create"
+            className="text-[#F5F9FF] hover:text-[#0EA5E9] transition-colors duration-200"
+          >
             Create Listing
           </Link>
 
-          <Link to="/login" className="hover:text-yellow-400">
-            Login
-          </Link>
+          <div className="hidden md:block w-px h-6 bg-[#F5F9FF]/20 mx-2"></div>
 
-          <Link to="/register" className="hover:text-yellow-400">
-            Register
-          </Link>
+          <UserData />
         </div>
       </div>
     </nav>
