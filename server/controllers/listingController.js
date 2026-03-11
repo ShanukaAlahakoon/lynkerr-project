@@ -63,8 +63,62 @@ const getListingById = async (req, res) => {
   }
 };
 
+const updateListing = async (req, res) => {
+  try {
+    const { title, location, imageUrls, description, price } = req.body;
+
+    const listing = await Listing.findById(req.params.id);
+
+    if (!listing) {
+      return res.status(404).json({ message: "Listing not found" });
+    }
+
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
+    const ownerId = listing.createdBy.toString();
+    const currentUserId = (req.user._id || req.user.id).toString();
+
+    if (ownerId !== currentUserId) {
+      return res
+        .status(401)
+        .json({ message: "You are not authorized to edit this experience" });
+    }
+
+    const updatedListing = await Listing.findByIdAndUpdate(
+      req.params.id,
+      { title, location, imageUrls, description, price },
+      { new: true, runValidators: true },
+    );
+
+    res.json(updatedListing);
+  } catch (error) {
+    console.error("Update Error:", error);
+    res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
+
+const deleteListing = async (req, res) => {
+  try {
+    const listing = await Listing.findById(req.params.id);
+    if (!listing) return res.status(404).json({ message: "Listing not found" });
+
+    if (listing.createdBy.toString() !== req.user.id) {
+      return res.status(401).json({ message: "Not authorized to delete this" });
+    }
+
+    await listing.deleteOne();
+    res.json({ message: "Listing removed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createListing,
   getAllListings,
   getListingById,
+  updateListing,
+  deleteListing,
 };
