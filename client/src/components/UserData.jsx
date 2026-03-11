@@ -22,6 +22,7 @@ function UserData() {
         setIsOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -35,16 +36,19 @@ function UserData() {
 
   if (user) {
     return (
-      <div className="relative" ref={dropdownRef}>
+      <div className="w-full md:relative" ref={dropdownRef}>
         {/* User Profile Trigger Button */}
         <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-3 p-1 pr-3 rounded-full hover:bg-white/10 transition-all focus:outline-none border border-transparent active:border-white/20"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(!isOpen);
+          }}
+          className="flex items-center gap-3 p-2 rounded-xl md:rounded-full hover:bg-white/10 transition-all focus:outline-none w-full md:w-auto"
         >
-          <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-tr from-[#0EA5E9] to-[#F59E0B] flex items-center justify-center text-lg font-bold text-white shadow-md">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#0EA5E9] to-[#F59E0B] flex items-center justify-center text-lg font-bold text-white shadow-md flex-shrink-0">
             {user.name?.charAt(0)?.toUpperCase() || "U"}
           </div>
-          <div className="hidden md:flex flex-col text-left">
+          <div className="flex flex-col text-left flex-grow">
             <span className="text-sm font-bold text-white leading-tight">
               {user.name}
             </span>
@@ -65,10 +69,10 @@ function UserData() {
           </svg>
         </button>
 
-        {/* Dropdown Menu */}
+        {/* User Options */}
         {isOpen && (
-          <div className="absolute right-0 mt-2 w-56 md:w-64 bg-[#1F2937] border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl z-[100] overflow-hidden transform origin-top-right transition-all">
-            <div className="p-4 border-b border-white/5 bg-white/5">
+          <div className="md:absolute md:right-0 mt-2 w-full md:w-64 bg-[#1F2937]/80 md:bg-[#1F2937] border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl z-[100] overflow-hidden">
+            <div className="p-4 border-b border-white/5 bg-white/5 hidden md:block">
               <p className="text-xs text-gray-400 font-medium mb-1">
                 Signed in as
               </p>
@@ -77,11 +81,11 @@ function UserData() {
               </p>
             </div>
 
-            <div className="p-2">
+            <div className="p-2 space-y-1">
               <Link
                 to="/my-listings"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-200 hover:bg-[#0EA5E9] hover:text-white transition-all text-sm group"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-200 hover:bg-[#0EA5E9] hover:text-white transition-all text-sm group"
               >
                 <svg
                   className="w-5 h-5 text-gray-400 group-hover:text-white"
@@ -101,7 +105,7 @@ function UserData() {
 
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 transition-all text-sm group text-left"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all text-sm group text-left"
               >
                 <svg
                   className="w-5 h-5 text-red-400"
@@ -126,17 +130,16 @@ function UserData() {
   }
 
   return (
-    <div className="flex items-center gap-3 md:gap-6">
+    <div className="flex flex-col md:flex-row items-center gap-3 md:gap-6 w-full md:w-auto">
       <Link
         to="/login"
-        className="text-[#F5F9FF] text-sm md:text-base font-medium hover:text-[#0EA5E9] transition-colors"
+        className="text-[#F5F9FF] text-base md:text-base font-medium hover:text-[#0EA5E9] transition-colors w-full text-left md:w-auto p-2"
       >
         Login
       </Link>
-
       <Link
         to="/register"
-        className="bg-[#F59E0B] hover:bg-[#d98b09] text-[#1F2937] px-5 py-2 md:px-6 md:py-2.5 rounded-full font-bold transition-all hover:scale-105 shadow-md text-sm md:text-base"
+        className="bg-[#F59E0B] hover:bg-[#d98b09] text-[#1F2937] px-6 py-2.5 rounded-full font-bold transition-all hover:scale-105 shadow-md text-center w-full md:w-auto"
       >
         Register
       </Link>
