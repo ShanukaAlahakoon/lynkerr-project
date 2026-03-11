@@ -2,18 +2,24 @@ const Listing = require("../models/Listing");
 
 const createListing = async (req, res) => {
   try {
-    const { title, location, imageUrl, description, price } = req.body;
+    const { title, location, imageUrls, description, price } = req.body;
 
-    if (!title || !location || !imageUrl || !description) {
-      return res
-        .status(400)
-        .json({ message: "Please fill all required fields" });
+    if (
+      !title ||
+      !location ||
+      !description ||
+      !imageUrls ||
+      imageUrls.length === 0
+    ) {
+      return res.status(400).json({
+        message: "Please fill all required fields and add at least one image.",
+      });
     }
 
     const listing = await Listing.create({
       title,
       location,
-      imageUrl,
+      imageUrls,
       description,
       price: price || null,
       createdBy: req.user.id,
@@ -23,6 +29,7 @@ const createListing = async (req, res) => {
 
     res.status(201).json(populatedListing);
   } catch (error) {
+    console.error("Backend Error:", error.message);
     res.status(500).json({ message: error.message });
   }
 };

@@ -12,10 +12,9 @@ const listingSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    imageUrl: {
-      type: String,
+    imageUrls: {
+      type: [String],
       required: true,
-      trim: true,
     },
     description: {
       type: String,

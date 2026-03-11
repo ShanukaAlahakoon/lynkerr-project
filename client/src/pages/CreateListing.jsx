@@ -6,24 +6,44 @@ import API from "../services/api";
 function CreateListing() {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const [imageUrls, setImageUrls] = useState([]);
+  const [currentUrlInput, setCurrentUrlInput] = useState("");
+
   const navigate = useNavigate();
+
+  const handleAddImageUrl = (e) => {
+    e.preventDefault();
+
+    if (!currentUrlInput.trim()) return;
+
+    if (!currentUrlInput.startsWith("http")) {
+      toast.error("Please enter a valid URL starting with http:// or https://");
+      return;
+    }
+
+    setImageUrls([...imageUrls, currentUrlInput.trim()]);
+    setCurrentUrlInput("");
+  };
+
+  const handleRemoveImage = (indexToRemove) => {
+    setImageUrls(imageUrls.filter((_, index) => index !== indexToRemove));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation
-    if (
-      !title.trim() ||
-      !location.trim() ||
-      !imageUrl.trim() ||
-      !description.trim()
-    ) {
-      toast.error("Please fill in all required fields.");
+    if (!title.trim() || !location.trim() || !description.trim()) {
+      toast.error("Please fill in all required text fields.");
+      return;
+    }
+
+    if (imageUrls.length === 0) {
+      toast.error("Please add at least one image URL.");
       return;
     }
 
@@ -33,8 +53,8 @@ function CreateListing() {
       const newListing = {
         title,
         location,
-        imageUrl,
         description,
+        imageUrls,
         price: price ? Number(price) : undefined,
       };
 
@@ -105,22 +125,59 @@ function CreateListing() {
               </div>
             </div>
 
+            {/* Multiple Image URL Input Section */}
             <div>
               <label className="block text-sm font-semibold text-secondary mb-1">
-                Image URL *
+                Image URLs * (Add at least one)
               </label>
-              <input
-                type="url"
-                placeholder="https://example.com/image.jpg"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent outline-none transition-all text-secondary bg-gray-50 focus:bg-white"
-              />
+              <div className="flex gap-2 mb-3">
+                <input
+                  type="url"
+                  placeholder="https://example.com/image.jpg"
+                  value={currentUrlInput}
+                  onChange={(e) => setCurrentUrlInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleAddImageUrl(e);
+                    }
+                  }}
+                  className="flex-grow px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0EA5E9] focus:border-transparent outline-none transition-all text-secondary bg-gray-50 focus:bg-white"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddImageUrl}
+                  className="bg-[#0EA5E9] hover:bg-[#0284c7] text-white px-4 py-2.5 rounded-lg font-bold transition-colors"
+                >
+                  Add
+                </button>
+              </div>
+
+              {imageUrls.length > 0 && (
+                <ul className="space-y-2 mb-2">
+                  {imageUrls.map((url, index) => (
+                    <li
+                      key={index}
+                      className="flex justify-between items-center bg-gray-100 px-3 py-2 rounded-lg text-sm"
+                    >
+                      <span className="truncate max-w-[200px] text-gray-600">
+                        {url}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(index)}
+                        className="text-red-500 hover:text-red-700 font-bold"
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-secondary mb-1">
-                Short Description *
+                Full Description *
               </label>
               <textarea
                 rows="4"
@@ -141,24 +198,49 @@ function CreateListing() {
           </form>
         </div>
 
-        {/* Right Side: Image Preview */}
-        <div className="w-full md:w-2/5 bg-gray-50 p-8 flex flex-col items-center justify-center border-l border-gray-100">
-          <p className="text-sm font-medium text-gray-400 mb-4 uppercase tracking-widest">
-            Image Preview
+        {/* Right Side: Image Preview Grid */}
+        <div className="w-full md:w-2/5 bg-gray-50 p-8 flex flex-col items-center justify-center border-l border-gray-100 overflow-y-auto">
+          <p className="text-sm font-medium text-gray-400 mb-4 uppercase tracking-widest sticky top-0 bg-gray-50 w-full text-center py-2 z-10">
+            Image Preview ({imageUrls.length})
           </p>
-          <div className="w-full h-64 md:h-full max-h-[400px] rounded-xl overflow-hidden bg-gray-200 border-2 border-dashed border-gray-300 flex items-center justify-center relative shadow-inner">
-            {imageUrl ? (
-              <img
-                src={imageUrl}
-                alt="Preview"
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src =
-                    "https://via.placeholder.com/400x300?text=Invalid+Image+URL";
-                }}
-              />
-            ) : (
+
+          {imageUrls.length > 0 ? (
+            <div className="w-full flex flex-col gap-4">
+              <div className="w-full h-48 rounded-xl overflow-hidden bg-gray-200 border-2 border-dashed border-gray-300 shadow-inner">
+                <img
+                  src={imageUrls[0]}
+                  alt="Cover Preview"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.src =
+                      "https://via.placeholder.com/400x300?text=Invalid+Image";
+                  }}
+                />
+              </div>
+
+              {imageUrls.length > 1 && (
+                <div className="grid grid-cols-2 gap-2">
+                  {imageUrls.slice(1).map((url, index) => (
+                    <div
+                      key={index}
+                      className="h-24 rounded-lg overflow-hidden bg-gray-200 border border-gray-300"
+                    >
+                      <img
+                        src={url}
+                        alt={`Preview ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.src =
+                            "https://via.placeholder.com/150?text=Error";
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="w-full h-64 rounded-xl overflow-hidden bg-gray-200 border-2 border-dashed border-gray-300 flex items-center justify-center shadow-inner">
               <div className="text-gray-400 flex flex-col items-center">
                 <svg
                   className="w-12 h-12 mb-2"
@@ -173,10 +255,12 @@ function CreateListing() {
                     d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
-                <span>No image entered</span>
+                <span className="text-center px-4">
+                  Add image URLs to see preview
+                </span>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
