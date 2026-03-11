@@ -23,8 +23,8 @@ function PlaceCard({ listing }) {
   return (
     <Link to={`/listing/${listing._id}`} className="group block h-full">
       <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 border border-gray-100 h-full flex flex-col">
-        {/* Image Section  */}
-        <div className="relative h-48 w-full overflow-hidden bg-gray-100">
+        {/* Image Section */}
+        <div className="relative h-56 sm:h-48 md:h-52 w-full overflow-hidden bg-gray-100">
           <img
             src={
               listing.imageUrls && listing.imageUrls.length > 0
@@ -48,11 +48,11 @@ function PlaceCard({ listing }) {
 
         {/* Content Section */}
         <div className="p-5 flex flex-col flex-grow">
-          <h2 className="text-xl font-bold text-secondary group-hover:text-[#0EA5E9] transition-colors line-clamp-1 mb-2">
+          <h2 className="text-lg md:text-xl font-bold text-secondary group-hover:text-[#0EA5E9] transition-colors line-clamp-1 mb-2">
             {listing.title}
           </h2>
 
-          <p className="text-[#0EA5E9] font-semibold text-sm mb-3 flex items-center gap-1">
+          <p className="text-[#0EA5E9] font-semibold text-xs md:text-sm mb-3 flex items-center gap-1">
             <svg
               className="w-4 h-4"
               fill="none"

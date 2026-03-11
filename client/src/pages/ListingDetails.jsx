@@ -68,10 +68,10 @@ function ListingDetail() {
         : [];
 
   return (
-    <div className="min-h-screen bg-primary pt-28 pb-16 px-6 flex justify-center">
+    <div className="min-h-screen bg-primary pt-24 md:pt-28 pb-10 md:pb-16 px-4 md:px-6 flex justify-center">
       <div className="max-w-4xl w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
         {/* Image Slider Section */}
-        <div className="w-full h-64 md:h-96 relative bg-gray-200 group">
+        <div className="w-full h-60 sm:h-72 md:h-96 relative bg-gray-200 group">
           <img
             src={displayImages[currentImageIndex]}
             alt={listing.title}
@@ -82,10 +82,10 @@ function ListingDetail() {
             <>
               <button
                 onClick={prevImage}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white w-10 h-10 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 bg-black/50 md:bg-black/40 hover:bg-black/70 text-white w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full opacity-80 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5 md:w-6 md:h-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -101,10 +101,10 @@ function ListingDetail() {
 
               <button
                 onClick={nextImage}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white w-10 h-10 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 bg-black/50 md:bg-black/40 hover:bg-black/70 text-white w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full opacity-80 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5 md:w-6 md:h-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -118,11 +118,11 @@ function ListingDetail() {
                 </svg>
               </button>
 
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 md:gap-2">
                 {displayImages.map((_, index) => (
                   <div
                     key={index}
-                    className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                    className={`w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-colors ${
                       currentImageIndex === index
                         ? "bg-[#F59E0B]"
                         : "bg-white/50"
@@ -134,22 +134,22 @@ function ListingDetail() {
           )}
 
           {listing.price && (
-            <div className="absolute top-4 right-4 bg-[#F59E0B] text-secondary px-5 py-2 rounded-full font-extrabold shadow-lg text-lg">
+            <div className="absolute top-3 right-3 md:top-4 md:right-4 bg-[#F59E0B] text-secondary px-4 py-1.5 md:px-5 md:py-2 rounded-full font-extrabold shadow-lg text-base md:text-lg">
               ${listing.price}
             </div>
           )}
         </div>
 
         {/* Content Section */}
-        <div className="p-8 md:p-10">
-          <div className="flex flex-col mb-6">
-            <h1 className="text-3xl md:text-5xl font-extrabold text-secondary mb-3">
+        <div className="p-6 md:p-8 lg:p-10">
+          <div className="flex flex-col mb-5 md:mb-6">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-secondary mb-2 md:mb-3 leading-tight">
               {listing.title}
             </h1>
 
-            <div className="flex items-center gap-2 text-[#0EA5E9] font-semibold text-lg">
+            <div className="flex items-center gap-1.5 md:gap-2 text-[#0EA5E9] font-semibold text-base md:text-lg">
               <svg
-                className="w-5 h-5"
+                className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -171,33 +171,33 @@ function ListingDetail() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 mt-6 mb-8 p-5 bg-gray-50 rounded-xl border border-gray-100">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#0EA5E9] to-[#F59E0B] flex items-center justify-center text-2xl font-bold text-white shadow-md">
+          <div className="flex items-center gap-3 md:gap-4 mt-5 md:mt-6 mb-6 md:mb-8 p-4 md:p-5 bg-gray-50 rounded-xl border border-gray-100">
+            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-tr from-[#0EA5E9] to-[#F59E0B] flex items-center justify-center text-xl md:text-2xl font-bold text-white shadow-md flex-shrink-0">
               {listing.createdBy?.name?.charAt(0)?.toUpperCase() || "U"}
             </div>
             <div>
-              <p className="text-sm text-gray-500 font-semibold uppercase tracking-wider mb-0.5">
+              <p className="text-xs md:text-sm text-gray-500 font-semibold uppercase tracking-wider mb-0.5">
                 Hosted by
               </p>
-              <p className="text-xl font-bold text-secondary">
+              <p className="text-lg md:text-xl font-bold text-secondary">
                 {listing.createdBy?.name || "Unknown Host"}
               </p>
             </div>
           </div>
 
-          <div className="mb-8">
-            <h3 className="text-2xl font-bold text-secondary mb-4">
+          <div className="mb-6 md:mb-8">
+            <h3 className="text-xl md:text-2xl font-bold text-secondary mb-3 md:mb-4">
               About this experience
             </h3>
-            <p className="text-gray-600 leading-relaxed whitespace-pre-line text-lg">
+            <p className="text-gray-600 leading-relaxed whitespace-pre-line text-base md:text-lg">
               {listing.description}
             </p>
           </div>
 
-          <div className="flex justify-between items-center mt-10 pt-6 border-t border-gray-200">
+          <div className="flex justify-between items-center mt-8 md:mt-10 pt-5 md:pt-6 border-t border-gray-200">
             <Link
               to="/"
-              className="text-gray-500 hover:text-[#0EA5E9] font-bold transition-colors flex items-center gap-2"
+              className="text-gray-500 hover:text-[#0EA5E9] font-bold transition-colors flex items-center gap-2 text-sm md:text-base"
             >
               &larr; Back to Feed
             </Link>
